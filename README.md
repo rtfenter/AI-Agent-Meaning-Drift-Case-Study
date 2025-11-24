@@ -1,58 +1,62 @@
 # AI Agent Meaning Drift — Case Study  
 ### How interpretation changes across safety layers, memory compression, and constraint handling
 
-This case study analyzes a real, publicly observed issue in modern AI agents (including Claude): meaning drift.  
+This case study analyzes a publicly observable issue in modern AI agents (including Claude): **meaning drift**.  
 Meaning drift occurs when the model’s final interpretation of a user request differs from the original intent due to:
 
-- safety classification
-- policy reinterpretation
-- memory compression
-- constraint loss
-- inferred rather than explicit intent
+- safety classification  
+- policy reinterpretation  
+- memory compression  
+- constraint loss  
+- inferred rather than explicit intent  
 
-This is not speculation about internal architectures.  
-All observations are based on user-facing model behavior documented in release notes, community feedback, and public research.
+This analysis is based solely on user-facing behavior, public documentation, and visible model outputs.  
+No internal or proprietary information is referenced or implied.
 
 ---
 
 ## 1. What Is Meaning Drift?
 
-Meaning drift is when the model responds to a *different* version of the input than the one the user intended.
+Meaning drift occurs when the model responds to a *different* version of the input than the one the user intended.
 
-Examples observed across AI systems:
-- benign queries flagged as risky → over-cautious refusals  
-- instructions reframed by the model into a narrower domain  
-- lost formatting/style constraints due to memory compression  
-- tone shifting mid-conversation  
-- hallucinated rules or permissions  
+Documented behaviors across multiple AI systems include:
 
-These failure modes appear in user reports and in official model updates where companies note:
-- “reduced over-cautiousness”
-- “improved interpretation”
-- “improved memory fidelity”
-- “reduced hallucinations of constraints”
+- safe queries flagged as risky → over-cautious refusals  
+- user instructions reframed or narrowed  
+- formatting/style rules lost due to memory compression  
+- tone shifts mid-conversation  
+- hallucinated constraints or permissions  
+
+These patterns appear in public model updates where companies note improvements like:
+
+- “reduced over-cautiousness”  
+- “improved interpretation”  
+- “better memory fidelity”  
+- “fewer constraint hallucinations”  
 
 ---
 
 ## 2. Likely Contributing Factors
 
-Meaning drift often arises from interactions between:
+Meaning drift often results from interactions between:
 
 ### A. Safety Layers  
-Requests are categorized into risk levels.  
-Categorization can overcorrect, altering the perceived meaning.
+Requests are classified into risk categories.  
+Classification can unintentionally alter perceived intent.
 
 ### B. Policy Interpretation  
-Global policy sometimes overrides local user context.
+Global safety/policy rules sometimes override localized user context.
 
 ### C. Memory Compression  
-When the conversation grows, summaries remove nuance:
-- tone preferences  
-- safety clarifications  
-- specific constraints  
+Conversation summaries may drop important nuance:
+
+- tone or style rules  
+- clarified safety context  
+- formatting constraints  
+- multi-step logic threads  
 
 ### D. Reasoning Layer  
-The model generates output using an already transformed version of the prompt.
+The model produces its final answer using an already-transformed version of the original prompt.
 
 ---
 
@@ -76,14 +80,15 @@ The model generates output using an already transformed version of the prompt.
        |
        v
 [Model Reasoning]
- - final output (may drift)
+ - final output (potential drift)
 ```
 
 ---
 
-## 4. Stabilizing Interpretation: Proposed Contract Model  
+## 4. Stabilizing Interpretation: Proposed Contract Model
 
-Meaning drift is not solved with UX or prompting alone — it requires architectural shifts.
+Meaning drift cannot be fully solved through prompting alone.  
+It requires a product-and-architecture-level contract.
 
 ### A. Explicit Intent Contract (EIC)
 A small metadata block attached to each task:
@@ -96,20 +101,20 @@ A small metadata block attached to each task:
 }
 ```
 
-Every subsystem must respect this.  
-No reinterpretation unless required for safety.
+Every subsystem must respect it.  
+Reinterpretation only occurs when genuinely required for safety.
 
 ### B. Memory Invariant Layer  
-A constraint that prevents memory from deleting user-defined instructions:
+A rule ensuring user constraints persist verbatim across memory cycles:
 
 ```
 If a user declares constraints,
-they persist verbatim across memory cycles.
+they persist verbatim unless the user changes them.
 ```
 
 ### C. Safety Layer Contract  
-Safety may **block** unsafe tasks,  
-but should not **reinterpret** safe ones.
+The safety layer should **block** unsafe tasks,  
+but should not **reinterpret** otherwise safe instructions.
 
 ---
 
@@ -135,32 +140,34 @@ but should not **reinterpret** safe ones.
 
 ## 6. Why This Matters
 
-Agents that reinterpret user intent unpredictably:
-- violate trust  
-- become harder to integrate  
-- produce unstable behavior over long conversations  
-- risk accidental refusals or over-compliance  
-- cannot serve reliably as assistants or decision partners  
+Agents that reinterpret intent:
 
-Stabilizing meaning is foundational to building aligned, predictable agents.
+- erode user trust  
+- create unpredictable UX  
+- produce unstable long-form reasoning  
+- increase false refusals  
+- make integration harder across tools and workflows  
+- limit reliability in professional or high-stakes contexts  
+
+Stable interpretation is a prerequisite for aligned, predictable AI systems.
 
 ---
 
 ## 7. About This Case Study
 
-This repo does not claim internal knowledge of Anthropic systems.  
-It examines publicly observable behavior, industry-documented failure modes, and architectural patterns used across modern AI stacks.
+This repository contains **independent product analysis** based on publicly visible behavior of modern AI systems.  
+It does **not** claim insight into internal architectures or private implementations.
 
-It is written from a product-architecture perspective, focusing on:
-- drift detection  
-- contract design  
-- memory invariants  
-- alignment boundaries  
+The purpose is to:  
+- analyze meaning drift as a visible system behavior  
+- propose product-level contracts that could mitigate it  
+- outline clear architectural shapes that support alignment  
+- demonstrate system reasoning from a PM perspective  
 
 ---
 
 ## 8. Author
 
-Rebecca Fenter (rtfenter)  
+**Rebecca Fenter (rtfenter)**  
 Product Manager — systems, platforms, AI architecture  
-https://github.com/rtfenter  
+https://github.com/rtfenter
