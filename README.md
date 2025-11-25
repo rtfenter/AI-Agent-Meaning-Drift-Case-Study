@@ -1,7 +1,8 @@
 # AI Agent Meaning Drift — Case Study  
 ### How interpretation changes across safety layers, memory compression, and constraint handling
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-000?style=for-the-badge)](YOUR_DEMO_URL_HERE)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-000?style=for-the-badge)](https://rtfenter.github.io/AI-Agent-Meaning-Drift-Case)
+
 
 ---
 
