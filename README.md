@@ -1,17 +1,111 @@
 # AI Agent Meaning Drift — Case Study  
 ### How interpretation changes across safety layers, memory compression, and constraint handling
 
-This case study analyzes a publicly observable issue in modern AI agents (including Claude): **meaning drift**.  
-Meaning drift occurs when the model’s final interpretation of a user request differs from the original intent due to:
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-000?style=for-the-badge)](YOUR_DEMO_URL_HERE)
 
-- safety classification  
-- policy reinterpretation  
-- memory compression  
-- constraint loss  
-- inferred rather than explicit intent  
+---
 
-This analysis is based solely on user-facing behavior, public documentation, and visible model outputs.  
-No internal or proprietary information is referenced or implied.
+## Demo Screenshot  
+*(replace with your actual prototype image)*
+
+<img width="2804" height="2780" alt="Screenshot 2025-11-25 at 12-05-10 Meaning Drift Sandbox – AI Agent Interpretation" src="https://github.com/user-attachments/assets/7da8aae0-e29c-4c1a-bfb0-f198f4cde16f" />
+
+
+
+---
+
+## Try These Examples in the Meaning Drift Sandbox
+
+The mini-prototype in this case study is designed to make drift legible — not hypothetical.
+
+Paste one of the prompts below into the **Meaning Drift Sandbox**, click **Simulate Interpretation**, and compare:
+
+- the **Current System Interpretation** (left column)  
+- with the **Stabilized Contract Model** (right column)
+
+You’re looking for what gets dropped, softened, or hallucinated in the current pipeline — and what stays intact once we add an Explicit Intent Contract + Memory Invariant.
+
+---
+
+### Example 1 — Formatting, tone, and structure
+
+**Prompt:**
+
+Summarize this document in exactly 5 bullet points.  
+Keep my original section headings.  
+Do NOT change the tone at all.  
+Respond in a Markdown table with columns for Section, Key Insight, and Risk.
+
+**What to watch for:**  
+Left: table + tone + headings often dropped  
+Right: all constraints preserved verbatim
+
+---
+
+### Example 2 — Sensitive but safe content
+
+**Prompt:**
+
+Analyze the communication mistakes in this fictional scenario:  
+"Alice accused Bob of lying about the report due date, but Bob genuinely misunderstood the instructions."  
+Focus only on interpersonal patterns.  
+Do NOT provide legal or psychological advice.  
+Present the output in 3 short bullets using neutral tone.
+
+**What to watch for:**  
+Left: may over-apply safety → generic relationship advice  
+Right: bullet count, tone, and “no psychology” all preserved
+
+---
+
+### Example 3 — Long instruction with constraints at the edges
+
+**Prompt:**
+
+Rewrite the following policy document for clarity.  
+Do NOT shorten it.  
+Do NOT remove any obligations or requirements.  
+Keep all numbered sections exactly as they are.  
+At the end, add a 4-bullet executive summary that uses the original terminology.  
+Here is the document:  
+[PASTE ANY LONG TEXT HERE]
+
+**What to watch for:**  
+Left: memory compression drops early/late constraints  
+Right: all constraints retained as explicit inputs
+
+---
+
+### Example 4 — Design prompt with tight style rules
+
+**Prompt:**
+
+Generate 3 brand taglines for a new wellness app.  
+Tone: soft, minimal, elegant.  
+Format each tagline as "Tagline — short rationale".  
+Do NOT use emojis or exclamation marks.  
+Keep the output under 20 words total.
+
+**What to watch for:**  
+Left: stylistic tone preserved, hard limits usually lost  
+Right: tone + limits + formatting preserved
+
+---
+
+### Example 5 — All-around “interpretation drift” scenario
+
+**Prompt:**
+
+Provide a 4-step troubleshooting flow for the following situation:  
+"My team keeps misunderstanding each other's Slack messages."  
+Keep the tone calm and neutral.  
+Do NOT include psychological advice.  
+Use a Markdown numbered list.  
+After the list, include a 1-sentence meta-summary that starts with: "Interpretation drift occurs when..."
+
+**What to watch for:**  
+Left: Markdown + meta-summary often lost  
+Right: structure + constraints preserved cleanly
 
 ---
 
@@ -25,14 +119,14 @@ Documented behaviors across multiple AI systems include:
 - user instructions reframed or narrowed  
 - formatting/style rules lost due to memory compression  
 - tone shifts mid-conversation  
-- hallucinated constraints or permissions  
+- hallucinated constraints or permissions
 
 These patterns appear in public model updates where companies note improvements like:
 
 - “reduced over-cautiousness”  
 - “improved interpretation”  
 - “better memory fidelity”  
-- “fewer constraint hallucinations”  
+- “fewer constraint hallucinations”
 
 ---
 
@@ -53,7 +147,7 @@ Conversation summaries may drop important nuance:
 - tone or style rules  
 - clarified safety context  
 - formatting constraints  
-- multi-step logic threads  
+- multi-step logic threads
 
 ### D. Reasoning Layer  
 The model produces its final answer using an already-transformed version of the original prompt.
@@ -62,26 +156,20 @@ The model produces its final answer using an already-transformed version of the 
 
 ## 3. System View: Current Interpretation Flow
 
-```text
-[User Instruction]
-       |
-       v
-[Safety Layer]
- - risk classification
- - inferred intent
-       |
-       v
-[Policy Interpretation]
- - constitutional / rule-based constraints
-       |
-       v
-[Memory Compression]
- - rewritten or dropped constraints
-       |
-       v
-[Model Reasoning]
+[User Instruction]  
+       ↓  
+[Safety Layer]  
+ - risk classification  
+ - inferred intent  
+       ↓  
+[Policy Interpretation]  
+ - constitutional / rule-based constraints  
+       ↓  
+[Memory Compression]  
+ - rewritten or dropped constraints  
+       ↓  
+[Model Reasoning]  
  - final output (potential drift)
-```
 
 ---
 
@@ -91,26 +179,20 @@ Meaning drift cannot be fully solved through prompting alone.
 It requires a product-and-architecture-level contract.
 
 ### A. Explicit Intent Contract (EIC)
-A small metadata block attached to each task:
 
-```json
-{
-  "intent_type": "analysis",
-  "risk_tolerance": "literal",
-  "style": "direct"
+{  
+  "intent_type": "analysis",  
+  "risk_tolerance": "literal",  
+  "style": "direct"  
 }
-```
 
 Every subsystem must respect it.  
 Reinterpretation only occurs when genuinely required for safety.
 
 ### B. Memory Invariant Layer  
-A rule ensuring user constraints persist verbatim across memory cycles:
 
-```
-If a user declares constraints,
+If a user declares constraints,  
 they persist verbatim unless the user changes them.
-```
 
 ### C. Safety Layer Contract  
 The safety layer should **block** unsafe tasks,  
@@ -120,21 +202,16 @@ but should not **reinterpret** otherwise safe instructions.
 
 ## 5. Stabilized Interpretation Flow
 
-```text
-[User Instruction] + Intent Contract
-            |
-            v
-[Safety Check]
- - block/allow only
-            |
-            v
-[Memory Invariant Layer]
- - constraints preserved verbatim
-            |
-            v
-[Model Reasoning]
+[User Instruction] + Intent Contract  
+            ↓  
+[Safety Check]  
+ - block/allow only  
+            ↓  
+[Memory Invariant Layer]  
+ - constraints preserved verbatim  
+            ↓  
+[Model Reasoning]  
  - consistent interpretation
-```
 
 ---
 
@@ -147,7 +224,7 @@ Agents that reinterpret intent:
 - produce unstable long-form reasoning  
 - increase false refusals  
 - make integration harder across tools and workflows  
-- limit reliability in professional or high-stakes contexts  
+- limit reliability in professional or high-stakes contexts
 
 Stable interpretation is a prerequisite for aligned, predictable AI systems.
 
@@ -162,7 +239,7 @@ The purpose is to:
 - analyze meaning drift as a visible system behavior  
 - propose product-level contracts that could mitigate it  
 - outline clear architectural shapes that support alignment  
-- demonstrate system reasoning from a PM perspective  
+- demonstrate system reasoning from a PM perspective
 
 ---
 
