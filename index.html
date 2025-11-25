@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Meaning Drift Sandbox – AI Agent Interpretation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="page-header">
+    <div class="page-header-inner">
+      <h1>Meaning Drift Sandbox</h1>
+      <p class="tagline">
+        Compare current agent interpretation flow vs a stabilized contract model.
+      </p>
+    </div>
+  </header>
+
+  <main class="main">
+    <!-- LEFT: DIAGRAMS -->
+    <section class="panel panel-diagrams">
+      <div class="panel-header">
+        <h2>Interpretation Pipelines</h2>
+      </div>
+
+      <p class="help-text">
+        These diagrams mirror the case study: first the current multi-layer pipeline, then the
+        proposed stabilized contract model using an Explicit Intent Contract and Memory Invariant.
+      </p>
+
+      <div class="diagram-grid">
+        <div class="diagram-card">
+          <h3>Current Interpretation Flow</h3>
+          <pre class="diagram">
+[User Instruction]
+       |
+       v
+[Safety Layer]
+ - risk classification
+ - inferred intent
+       |
+       v
+[Policy Interpretation]
+ - constitutional / rule-based constraints
+       |
+       v
+[Memory Compression]
+ - rewritten or dropped constraints
+       |
+       v
+[Model Reasoning]
+ - final output (potential drift)
+          </pre>
+        </div>
+
+        <div class="diagram-card">
+          <h3>Stabilized Interpretation Flow</h3>
+          <pre class="diagram">
+[User Instruction] + Intent Contract
+            |
+            v
+[Safety Check]
+ - block/allow only
+            |
+            v
+[Memory Invariant Layer]
+ - constraints preserved verbatim
+            |
+            v
+[Model Reasoning]
+ - consistent interpretation
+          </pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT: INTERACTIVE SANDBOX -->
+    <section class="panel panel-sandbox">
+      <div class="panel-header">
+        <h2>Meaning Drift Sandbox</h2>
+        <div class="panel-actions">
+          <button id="loadExampleBtn" class="btn btn-secondary">
+            Load Example Prompt
+          </button>
+        </div>
+      </div>
+
+      <p class="help-text">
+        Enter a user instruction and see how it can drift through a simulated current pipeline
+        versus a stabilized contract model. This is illustrative – not tied to any specific vendor.
+      </p>
+
+      <div class="field">
+        <label for="user-input">User Instruction</label>
+        <textarea
+          id="user-input"
+          rows="5"
+          placeholder="Example: Summarize this document in 5 bullet points, keep my original headings, don't change the tone, and respond in a Markdown table."
+        ></textarea>
+      </div>
+
+      <div class="field field-inline">
+        <div class="field-inner">
+          <label for="risk-profile">Safety Sensitivity</label>
+          <select id="risk-profile" class="select">
+            <option value="normal" selected>Normal</option>
+            <option value="high">High (over-cautious)</option>
+          </select>
+          <p class="help-text">
+            Higher sensitivity increases the chance of over-safety reinterpretation.
+          </p>
+        </div>
+        <div class="field-inner">
+          <label for="summary-aggressiveness">Memory Compression</label>
+          <select id="summary-aggressiveness" class="select">
+            <option value="light" selected>Light</option>
+            <option value="aggressive">Aggressive</option>
+          </select>
+          <p class="help-text">
+            Aggressive compression drops more detail and constraints before reasoning.
+          </p>
+        </div>
+      </div>
+
+      <div class="panel-footer">
+        <button id="simulateBtn" class="btn btn-primary">
+          Simulate Interpretation
+        </button>
+        <span id="status-text" class="parse-status" aria-live="polite">
+          No simulation yet.
+        </span>
+      </div>
+
+      <div class="results-grid">
+        <!-- Current System Column -->
+        <div class="results-column">
+          <h3 class="results-title">Current System Interpretation</h3>
+
+          <div class="stage-card">
+            <div class="stage-header">
+              <span class="stage-label">Safety Layer</span>
+            </div>
+            <pre id="current-safety" class="stage-pre">—</pre>
+          </div>
+
+          <div class="stage-card">
+            <div class="stage-header">
+              <span class="stage-label">Policy Interpretation</span>
+            </div>
+            <pre id="current-policy" class="stage-pre">—</pre>
+          </div>
+
+          <div class="stage-card">
+            <div class="stage-header">
+              <span class="stage-label">Memory Compression</span>
+            </div>
+            <pre id="current-memory" class="stage-pre">—</pre>
+          </div>
+
+          <div class="stage-card stage-final">
+            <div class="stage-header">
+              <span class="stage-label">Reasoning Input (Drifted)</span>
+            </div>
+            <pre id="current-final" class="stage-pre">—</pre>
+          </div>
+        </div>
+
+        <!-- Stabilized Column -->
+        <div class="results-column">
+          <h3 class="results-title">Stabilized Contract Model</h3>
+
+          <div class="stage-card">
+            <div class="stage-header">
+              <span class="stage-label">Explicit Intent Contract</span>
+            </div>
+            <pre id="stable-eic" class="stage-pre">—</pre>
+          </div>
+
+          <div class="stage-card">
+            <div class="stage-header">
+              <span class="stage-label">Safety Check (Block/Allow)</span>
+            </div>
+            <pre id="stable-safety" class="stage-pre">—</pre>
+          </div>
+
+          <div class="stage-card">
+            <div class="stage-header">
+              <span class="stage-label">Memory Invariant Layer</span>
+            </div>
+            <pre id="stable-memory" class="stage-pre">—</pre>
+          </div>
+
+          <div class="stage-card stage-final">
+            <div class="stage-header">
+              <span class="stage-label">Reasoning Input (Aligned)</span>
+            </div>
+            <pre id="stable-final" class="stage-pre">—</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    <p>
+      Part of the <strong>Product Architecture Case Studies</strong> series by
+      <a href="https://github.com/rtfenter" target="_blank" rel="noreferrer">rtfenter</a>.
+    </p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
