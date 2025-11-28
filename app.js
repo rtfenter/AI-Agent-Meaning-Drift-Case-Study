@@ -3,6 +3,8 @@ const riskProfileEl = document.getElementById("risk-profile");
 const summaryAggressivenessEl = document.getElementById("summary-aggressiveness");
 const simulateBtn = document.getElementById("simulateBtn");
 const loadExampleBtn = document.getElementById("loadExampleBtn");
+const exampleSelectEl = document.getElementById("example-select");
+const exampleNotesEl = document.getElementById("example-notes");
 const statusTextEl = document.getElementById("status-text");
 
 // Current pipeline outputs
@@ -17,13 +19,77 @@ const stableSafetyEl = document.getElementById("stable-safety");
 const stableMemoryEl = document.getElementById("stable-memory");
 const stableFinalEl = document.getElementById("stable-final");
 
+const EXAMPLES = [
+  {
+    id: "example1",
+    title: "Example 1 — Formatting, tone, and structure",
+    prompt: `Summarize this document in exactly 5 bullet points.
+Keep my original section headings.
+Do NOT change the tone at all.
+Respond in a Markdown table with columns for Section, Key Insight, and Risk.`,
+    watchFor:
+      "Left: table + tone + headings often dropped. Right: all constraints preserved verbatim."
+  },
+  {
+    id: "example2",
+    title: "Example 2 — Sensitive but safe content",
+    prompt: `Analyze the communication mistakes in this fictional scenario:
+"Alice accused Bob of lying about the report due date, but Bob genuinely misunderstood the instructions."
+Focus only on interpersonal patterns.
+Do NOT provide legal or psychological advice.
+Present the output in 3 short bullets using neutral tone.`,
+    watchFor:
+      "Left: may over-apply safety → generic relationship advice. Right: bullet count, tone, and “no psychology” all preserved."
+  },
+  {
+    id: "example3",
+    title: "Example 3 — Long instruction with constraints at the edges",
+    prompt: `Rewrite the following policy document for clarity.
+Do NOT shorten it.
+Do NOT remove any obligations or requirements.
+Keep all numbered sections exactly as they are.
+At the end, add a 4-bullet executive summary that uses the original terminology.
+Here is the document:
+[PASTE ANY LONG TEXT HERE]`,
+    watchFor:
+      "Left: memory compression drops early/late constraints. Right: all constraints retained as explicit inputs."
+  },
+  {
+    id: "example4",
+    title: "Example 4 — Design prompt with tight style rules",
+    prompt: `Generate 3 brand taglines for a new wellness app.
+Tone: soft, minimal, elegant.
+Format each tagline as "Tagline — short rationale".
+Do NOT use emojis or exclamation marks.
+Keep the output under 20 words total.`,
+    watchFor:
+      "Left: stylistic tone preserved, hard limits usually lost. Right: tone + limits + formatting preserved."
+  },
+  {
+    id: "example5",
+    title: "Example 5 — All-around interpretation drift scenario",
+    prompt: `Provide a 4-step troubleshooting flow for the following situation:
+"My team keeps misunderstanding each other's Slack messages."
+Keep the tone calm and neutral.
+Do NOT include psychological advice.
+Use a Markdown numbered list.
+After the list, include a 1-sentence meta-summary that starts with: "Interpretation drift occurs when..."`,
+    watchFor:
+      "Left: Markdown + meta-summary often lost. Right: structure + constraints preserved cleanly."
+  }
+];
+
+function getExampleById(id) {
+  return EXAMPLES.find((ex) => ex.id === id) || EXAMPLES[0];
+}
+
 function loadExamplePrompt() {
-  const example =
-    "Summarize this document in exactly 5 bullet points, " +
-    "keep my original section headings, don't change the tone, " +
-    "and respond in a Markdown table with columns for Section and Summary.";
-  userInputEl.value = example;
-  statusTextEl.textContent = "Example prompt loaded. Click “Simulate Interpretation” to see drift.";
+  const selectedId = exampleSelectEl ? exampleSelectEl.value : EXAMPLES[0].id;
+  const ex = getExampleById(selectedId);
+
+  userInputEl.value = ex.prompt;
+  exampleNotesEl.textContent = `What to watch for: ${ex.watchFor}`;
+  statusTextEl.textContent = `${ex.title} loaded. Click “Simulate Interpretation” to see drift.`;
 }
 
 function splitSentences(text) {
@@ -185,7 +251,7 @@ function simulateCurrentPipeline(text, riskProfile, compressionLevel) {
  * - Reasoning sees core instruction + explicit constraints
  */
 function simulateStabilizedPipeline(text) {
-  const { coreText, constraints, allSentences } = extractConstraints(text);
+  const { coreText, constraints } = extractConstraints(text);
 
   const eic = {
     intent_type: "analysis",
@@ -223,7 +289,7 @@ function simulateStabilizedPipeline(text) {
 function simulate() {
   const text = userInputEl.value.trim();
   if (!text) {
-    statusTextEl.textContent = "Enter a user instruction first.";
+    statusTextEl.textContent = "Load an example prompt first.";
     return;
   }
 
@@ -251,5 +317,10 @@ function simulate() {
 simulateBtn.addEventListener("click", simulate);
 loadExampleBtn.addEventListener("click", loadExamplePrompt);
 
-// Initial status
-statusTextEl.textContent = "No simulation yet. Load the example or paste a real instruction to begin.";
+// Initial state: auto-load Example 1
+document.addEventListener("DOMContentLoaded", () => {
+  if (exampleSelectEl) {
+    exampleSelectEl.value = "example1";
+  }
+  loadExamplePrompt();
+});
