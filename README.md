@@ -13,7 +13,7 @@
 
 ## Try These Examples in the Meaning Drift Sandbox
 
-Paste one of the prompts below into the **Meaning Drift Sandbox**, click **Simulate Interpretation**, and compare:
+Selct one of the prompts below from the dropdown in the **Meaning Drift Sandbox**, click **Simulate Interpretation**, and compare:
 
 - **Current System Interpretation** (left)  
 - **Stabilized Contract Model** (right)
