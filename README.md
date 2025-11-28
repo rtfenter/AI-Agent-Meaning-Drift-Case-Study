@@ -243,6 +243,13 @@ The purpose is to:
 
 ---
 
+### Part of the Product Architecture Case Studies Series 
+
+Main repo:  
+https://github.com/rtfenter/Product-Architecture-Case-Studies
+
+---
+
 ## 8. Author
 
 **Rebecca Fenter (rtfenter)**  
