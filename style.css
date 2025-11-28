@@ -115,10 +115,11 @@ body {
   gap: 8px;
 }
 
-/* Optional — keeps dropdown from shrinking too small */
+/* Keep dropdown compact next to the button */
 .panel-actions .select {
-  min-width: 220px;
-
+  width: auto;
+  min-width: 260px;
+  max-width: 100%;
 }
 
 /* Text */
