@@ -7,10 +7,9 @@
 ---
 
 ## Demo Screenshot  
-*(replace with your actual prototype image)*
 
-<img width="2804" height="2780" alt="Screenshot 2025-11-25 at 12-05-10 Meaning Drift Sandbox – AI Agent Interpretation" src="https://github.com/user-attachments/assets/7da8aae0-e29c-4c1a-bfb0-f198f4cde16f" />
 
+<img width="2806" height="2900" alt="Screenshot 2025-11-28 at 13-51-09 Meaning Drift Sandbox – AI Agent Interpretation" src="https://github.com/user-attachments/assets/1ad75967-810b-4a55-b02e-250f1528c3ce" />
 
 
 ---
