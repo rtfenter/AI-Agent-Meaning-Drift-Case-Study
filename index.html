@@ -79,6 +79,13 @@
       <div class="panel-header">
         <h2>Meaning Drift Sandbox</h2>
         <div class="panel-actions">
+          <select id="example-select" class="select">
+            <option value="example1">Example 1 — Formatting, tone, and structure</option>
+            <option value="example2">Example 2 — Sensitive but safe content</option>
+            <option value="example3">Example 3 — Long instruction with edge constraints</option>
+            <option value="example4">Example 4 — Design prompt with tight style rules</option>
+            <option value="example5">Example 5 — All-around interpretation drift</option>
+          </select>
           <button id="loadExampleBtn" class="btn btn-secondary">
             Load Example Prompt
           </button>
@@ -86,17 +93,19 @@
       </div>
 
       <p class="help-text">
-        Enter a user instruction and see how it can drift through a simulated current pipeline
+        Choose an example prompt and see how it can drift through a simulated current pipeline
         versus a stabilized contract model. This is illustrative – not tied to any specific vendor.
       </p>
 
       <div class="field">
-        <label for="user-input">User Instruction</label>
+        <label for="user-input">User Instruction (examples only)</label>
         <textarea
           id="user-input"
           rows="5"
-          placeholder="Example: Summarize this document in 5 bullet points, keep my original headings, don't change the tone, and respond in a Markdown table."
+          readonly
+          placeholder="Use the selector above and click “Load Example Prompt” to populate this instruction."
         ></textarea>
+        <p id="example-notes" class="help-text"></p>
       </div>
 
       <div class="field field-inline">
@@ -127,7 +136,7 @@
           Simulate Interpretation
         </button>
         <span id="status-text" class="parse-status" aria-live="polite">
-          No simulation yet.
+          Loading default example…
         </span>
       </div>
 
